@@ -7,18 +7,18 @@ body {
 }
 
 .grid-container {
-/* Contain the grid with a 5:4 aspect ratio and responsively scale */
-width: min(98vw, calc(98vh * 5 / 4));
-aspect-ratio: 5 / 4;
+    /* Contain the grid with a 5:4 aspect ratio and responsively scale */
+    width: min(98vw, calc(90vh * 5 / 4));
+    aspect-ratio: 5 / 4;
 
-/* Center horizontally and give a small vertical margin */
-margin: 4px auto;
+    /* Center horizontally and give a small vertical margin */
+    margin: 12px auto;
 
-/* Define a 5-column, 4-row grid with a small gap */
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-grid-template-rows: repeat(4, 1fr);
-gap: 8px;
+    /* Define a 5-column, 4-row grid with a small gap */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
 }
 
 .tile {
@@ -40,5 +40,26 @@ object-fit: cover;
   transition: transform 0.2s cubic-bezier(.4,0,.2,1);
 }
 .tile:hover {
-  transform: scale(1.2);
+  transform: scale(1.04);
+}
+
+
+.github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+    0%, 100% { transform: rotate(0); }
+    20%, 60% { transform: rotate(-25deg); }
+    40%, 80% { transform: rotate(10deg); }
+}
+
+@media (max-width: 500px) {
+    .github-corner:hover .octo-arm { animation: none; }
+    .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+}
+
+/* JavaScript will control visibility */
+.github-corner.hidden {
+    display: none !important;
 }
