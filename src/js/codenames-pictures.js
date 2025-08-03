@@ -43,6 +43,8 @@ function NewGame() {
         let currentCount = snapshot.exists() ? snapshot.val() : 0;
         set(gameCountRef, currentCount + 1); // <-- Use set() here
     });
+
+    setGame();
 }
 
 
@@ -51,9 +53,17 @@ function spymaster() {
 }
 
 function setGame() {
-    
-}
+    const cardIndex = getUniqueRandomIntegers(20, 0, 279);
+    const cardImages = cardIndex.map(num => `./assets/cards/card-${String(num)}.jpg`);
 
+    const tiles = document.querySelectorAll('.grid-container .tile img');
+    cardImages.forEach((src, i) => {
+        if (tiles[i]) {
+            tiles[i].src = src;
+            tiles[i].alt = `Card ${cardIndex[i]}`;
+        }
+    });
+}
 
 
 function getUniqueRandomIntegers(count, min, max) {
@@ -65,8 +75,8 @@ function getUniqueRandomIntegers(count, min, max) {
     return Array.from(numbers);
 }
 
-// Example usage:
-const randomIntegers = getUniqueRandomIntegers(20, 0, 279);
+// Export functions for use in other modules
+export { NewGame, spymaster, setGame, getUniqueRandomIntegers };
 
 // Make available in console
 window.getUniqueRandomIntegers = getUniqueRandomIntegers;
