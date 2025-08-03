@@ -1,4 +1,47 @@
 
+// ################################################################
+// Firebase Functions
+// ################################################################
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+import { ref, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    databaseURL: "https://codenames-pictures-2e44c-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "codenames-pictures-2e44c"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+
+
+// ################################################################
+// Gameplay Functions
+// ################################################################
+
+function NewGame() {
+    // Reset the game state
+    }
+
+
+function spymaster() {
+    // Toggle spymaster mode
+}
+
+function setGame() {
+}
+
+
+
+
+// ################################################################
+// Responsive Design Functions
+// ################################################################
+
 function checkGitHubCornerVisibility() {
     const githubCorner = document.querySelector('.github-corner');
     const windowWidth = window.innerWidth;
@@ -11,7 +54,6 @@ function checkGitHubCornerVisibility() {
         githubCorner.classList.remove('hidden');
     }
 }
-
 
 function checkTitleVisibility() {
     const title = document.querySelector('.title');
