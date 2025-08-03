@@ -3,21 +3,42 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 
+<!-- ---
+import ImageGrid from '../components/ImageGrid.astro';
+const myImages = [
+  '/images/1.jpg', '/images/2.jpg', /* … up to 20 URLs … */ '/images/20.jpg'
+];
+---
+<ImageGrid images={myImages} />
+
+
+<div class="grid-container">
+  {images.map((src, i) => (
+    <div class="grid-item" key={i}>
+      <img src={src} alt={`Image ${i + 1}`} />
+    </div>
+  ))}
+</div> -->
+
+
+
+
+
 <Layout>
 	<div style="text-align: center; margin-top: 8px; margin-bottom: 8px;">
 		<h1 style="font-family: Verdana, Geneva, sans-serif; font-weight: bold;">Codenames Pictures</h1>
 	</div>
 
-	<div style="position: absolute; top: 16px; left: 16px; z-index: 10;">
-		<button class="buttonNG" onclick="NewGame();" style="vertical-align:middle"><span>New Game </span></button>
+	<div class="top-left-container">
+		<button class="buttonNG" onclick="NewGame();">
+			<span>New Game</span>
+		</button>
 
 		<div class="spymaster-container">
-			<span class="spy">
-				Spymaster:
-			</span>
+			<span class="spy">Spymaster:</span>
 			<label class="switch">
-				<input type="checkbox" id="spyCheck" onclick="spymaster();">
-				<span class="slider round"></span>
+			<input type="checkbox" id="spyCheck" onclick="spymaster();" />
+			<span class="slider round"></span>
 			</label>
 		</div>
 	</div>

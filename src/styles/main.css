@@ -65,6 +65,20 @@ object-fit: cover;
 }
 
 
+
+
+/* wrap & position dynamically */
+.top-left-container {
+  position: absolute;
+  top: clamp(8px, 2vw, 16px);
+  left: clamp(8px, 2vw, 16px);
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(4px, 1vw, 8px);
+}
+
+
 /*******************************************************************************
 New Game Button - Mobile Responsive
 *******************************************************************************/
@@ -159,69 +173,84 @@ New Game Button - Mobile Responsive
 /*******************************************************************************
 Spymaster switch
 *******************************************************************************/
+
 .spymaster-container {
-    border: 2px solid black;
-    border-radius: 8px;
-    padding: 8px 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background-color: transparent;
+  padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
+  box-sizing: border-box;
+  border: 2px solid black;
+  border-radius: clamp(4px, 1vw, 8px);
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(6px, 2vw, 12px);
+  font-size: clamp(18px, 4vw, 24px);
+  background-color: transparent;
 }
 
 .spy {
-    font-family: 'Press Start 2P', sans-serif;
-    font-size: 120%;
-    margin: 0;
-    line-height: 1;
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: clamp(18px, 4vw, 24px);;
+  line-height: 1;
+  margin: 0;
 }
 
+/* ——— Responsive Switch ——— */
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-    flex-shrink: 0;
+  /* define sizing variables */
+  --switch-w: clamp(40px, 8vw, 60px);
+  --switch-h: clamp(24px, 5vw, 34px);
+  --knob-size: clamp(16px, 4vw, 26px);
+  --knob-offset: clamp(4px, 1vw, 4px);
+
+  position: relative;
+  display: inline-block;
+  width: var(--switch-w);
+  height: var(--switch-h);
+  flex-shrink: 0;
+  margin: 0;
 }
 
-.switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: var(--switch-h);
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
+  content: "";
+  position: absolute;
+  width: var(--knob-size);
+  height: var(--knob-size);
+  left: var(--knob-offset);
+  bottom: var(--knob-offset);
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+  background-color: #2196F3;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196F3;
 }
 
 input:checked + .slider:before {
-    transform: translateX(26px);
+  /* slide all the way across */
+  transform: translateX(
+    calc(
+      var(--switch-w)
+      - var(--knob-size)
+      - (var(--knob-offset) * 2)
+    )
+  );
 }
