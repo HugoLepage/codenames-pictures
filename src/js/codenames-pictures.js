@@ -6,6 +6,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 import { ref, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+import { get, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,15 +18,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-
+function getFirebaseReference(){
+    const url = window.location;
+    const urlObject = new URL(url);
+    var game_id = urlObject.searchParams.get('game')
+    if (game_id == null){
+        game_id = 'default';
+    }
+    var FirebaseReference = game_id;
+    return FirebaseReference
+}
 
 // ################################################################
 // Gameplay Functions
 // ################################################################
 
+
+
 function NewGame() {
     // Reset the game state
-    }
+    const FirebaseReference = getFirebaseReference();
+    const gameCountRef = ref(database, `${FirebaseReference}/gameCount`);
+    get(gameCountRef).then((snapshot) => {
+        let currentCount = snapshot.exists() ? snapshot.val() : 0;
+        set(gameCountRef, currentCount + 1); // <-- Use set() here
+    });
+}
 
 
 function spymaster() {
@@ -33,10 +51,28 @@ function spymaster() {
 }
 
 function setGame() {
+    
 }
 
 
 
+function getUniqueRandomIntegers(count, min, max) {
+    const numbers = new Set();
+    while (numbers.size < count) {
+        const num = Math.floor(Math.random() * (max - min + 1)) + min;
+        numbers.add(num);
+    }
+    return Array.from(numbers);
+}
+
+// Example usage:
+const randomIntegers = getUniqueRandomIntegers(20, 0, 279);
+
+// Make available in console
+window.getUniqueRandomIntegers = getUniqueRandomIntegers;
+
+// Make NewGame available globally
+window.NewGame = NewGame;
 
 // ################################################################
 // Responsive Design Functions

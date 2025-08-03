@@ -1,5 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+// Example: randomIntegers is provided from somewhere (replace with your actual source)
+const randomIntegers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+// Convert each integer to "../assets/cards/card-XXX.jpg"
+const cardImages = randomIntegers.map(num => `./assets/cards/card-${String(num)}.jpg`);
 ---
 
 
@@ -44,11 +50,11 @@ const myImages = [
 
 
 	<div class="grid-container">
-		{Array.from({ length: 20 }).map((_, i) => (
-				<div class="tile">
-					<img src={`https://picsum.photos/seed/${i}/200/200`} alt={`Tile ${i + 1}`} />
-				</div>
-			))}
+		{cardImages.map((src, i) => (
+			<div class="tile">
+				<img src={src} alt={`Card ${randomIntegers[i]}`} />
+			</div>
+		))}
 	</div>
 
 	<a href="../games/" class="github-corner">
