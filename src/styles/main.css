@@ -65,7 +65,9 @@ object-fit: cover;
 }
 
 
-
+.hidden {
+    display: none !important;
+}
 
 /* wrap & position dynamically */
 .top-left-container {
