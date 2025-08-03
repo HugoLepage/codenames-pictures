@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+
+<Layout>
+	<div class="grid-container">
+		{Array.from({ length: 20 }).map((_, i) => (
+				<div class="tile">
+					<img src={`https://picsum.photos/seed/${i}/200/200`} alt={`Tile ${i + 1}`} />
+				</div>
+			))}
+	</div>
+</Layout>
+
+
+
+
