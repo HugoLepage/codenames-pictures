@@ -29,6 +29,27 @@ function getFirebaseReference(){
     return FirebaseReference
 }
 
+
+function loadGame() {
+    const FirebaseReference = getFirebaseReference();
+    const gameRef = ref(database, `${FirebaseReference}/game`);
+    get(gameRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const gameData = snapshot.val();
+            console.log("Game data loaded successfully:", gameData);
+            const cardIndex = gameData.cardIndex || [];
+            showCardImages(cardIndex);
+            // Here you can update the UI with the loaded game data
+        } else {
+            console.log("No game data found.");
+        }
+    }).catch((error) => {
+        console.error("Error loading game data:", error);
+    });
+}
+
+window.addEventListener('load', loadGame);
+
 // ################################################################
 // Gameplay Functions
 // ################################################################
@@ -44,15 +65,10 @@ function NewGame() {
     });
 
     setGame();
+    loadGame();
 }
 
-
-function spymaster() {
-    // Toggle spymaster mode
-}
-
-function setGame() {
-    const cardIndex = getUniqueRandomIntegers(20, 0, 279);
+function showCardImages(cardIndex) {
     const cardImages = cardIndex.map(num => `./assets/cards/card-${String(num)}.jpg`);
 
     const tiles = document.querySelectorAll('.grid-container .tile img');
@@ -62,6 +78,23 @@ function setGame() {
             tiles[i].alt = `Card ${cardIndex[i]}`;
         }
     });
+}
+
+function spymaster() {
+    // Toggle spymaster mode
+}
+
+function setGame() {
+    const cardIndex = getUniqueRandomIntegers(20, 0, 279);
+    // const cardImages = cardIndex.map(num => `./assets/cards/card-${String(num)}.jpg`);
+
+    // const tiles = document.querySelectorAll('.grid-container .tile img');
+    // cardImages.forEach((src, i) => {
+    //     if (tiles[i]) {
+    //         tiles[i].src = src;
+    //         tiles[i].alt = `Card ${cardIndex[i]}`;
+    //     }
+    // });
 
     let redIndex, redRoles, blueIndex, blueRoles;
     if (Math.random() < 0.5) {
