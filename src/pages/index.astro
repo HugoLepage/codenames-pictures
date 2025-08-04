@@ -45,7 +45,7 @@ const myImages = [
 
 	<div class="grid-container">
 		{Array.from({ length: 20 }).map((_, i) => (
-			<div class="tile">
+			<div class="tile" onclick={`revealCard(${i});`}>
 				<img src="" alt="" />
 			</div>
 		))}

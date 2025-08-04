@@ -39,8 +39,9 @@ function loadGame() {
                 const gameData = snapshot.val();
                 console.log("Game data loaded successfully:", gameData);
                 const cardIndex = gameData.cardIndex || [];
-                showCardImages(cardIndex);
-                // Here you can update the UI with the loaded game data
+                const revealed = gameData.revealed || [];
+                const roles = gameData.roles || [];
+                showCardImages(cardIndex, roles, revealed);
             } else {
                 console.log("No game data found.");
             }
@@ -70,21 +71,57 @@ function NewGame() {
     // loadGame();
 }
 
-function showCardImages(cardIndex) {
+function showCardImages(cardIndex, roles, revealed) {
     const cardImages = cardIndex.map(num => `./assets/cards/card-${String(num)}.jpg`);
+    const agentImages = roles.map((role, i) => revealed[i] ? `./assets/agents/${role}.png` : '');
 
     const tiles = document.querySelectorAll('.grid-container .tile img');
     cardImages.forEach((src, i) => {
         if (tiles[i]) {
-            tiles[i].src = src;
+            if (revealed[i]) {
+                // If the card is revealed, show the agent image
+                tiles[i].src = agentImages[i];
+            }
+            else {
+                // If the card is not revealed, show the card image
+                tiles[i].src = src;
+            }
             tiles[i].alt = `Card ${cardIndex[i]}`;
         }
     });
 }
 
+function revealCard(index) {
+    const FirebaseReference = getFirebaseReference();
+    const gameRef = ref(database, `${FirebaseReference}/game`);
+    get(gameRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const gameData = snapshot.val();
+            const revealed = gameData.revealed || [];
+            if (!revealed[index]) {
+                revealed[index] = true; // Mark the card as revealed
+                const updatedGameData = {                    ...gameData,
+                    revealed: revealed
+                };
+                set(gameRef, updatedGameData);
+            } else {
+                console.log("Card already revealed.");
+            }
+        } else {
+            console.error("Game data not found.");
+        }
+    }).catch((error) => {
+        console.error("Error fetching game data:", error);
+    });
+}   
+
+
+
 function spymaster() {
     // Toggle spymaster mode
 }
+
+
 
 function setGame() {
     const cardIndex = getUniqueRandomIntegers(20, 0, 279);
@@ -155,6 +192,9 @@ window.getUniqueRandomIntegers = getUniqueRandomIntegers;
 
 // Make NewGame available globally
 window.NewGame = NewGame;
+
+// Make revealing card function available globally
+window.revealCard = revealCard;
 
 // ################################################################
 // Responsive Design Functions
