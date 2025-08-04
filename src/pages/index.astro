@@ -2,27 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-
-<!-- ---
-import ImageGrid from '../components/ImageGrid.astro';
-const myImages = [
-  '/images/1.jpg', '/images/2.jpg', /* … up to 20 URLs … */ '/images/20.jpg'
-];
----
-<ImageGrid images={myImages} />
-
-
-<div class="grid-container">
-  {images.map((src, i) => (
-    <div class="grid-item" key={i}>
-      <img src={src} alt={`Image ${i + 1}`} />
-    </div>
-  ))}
-</div> -->
-
-
-
-
 <Layout>
 	<div style="text-align: center; margin-top: 8px; margin-bottom: 8px;">
 		<h1 class="title" style="font-family: Verdana, Geneva, sans-serif; font-weight: bold;">Codenames Pictures</h1>
@@ -42,6 +21,9 @@ const myImages = [
 		</div>
 	</div>
 
+	<!-- <div class="startingTeam" style="height: 8px; width: 100%; max-width: 700px; background-color: red; border-radius: 4px; margin: 28px auto 16px auto;"></div> -->
+	<div style="position: relative; width: 100%; margin: 0 auto;">
+	<div class="startingTeam" style="position: absolute; top: -16px; left: 50%; transform: translateX(-50%); height: 8px; width: 100%; max-width: 400px; background-color: red; border-radius: 4px;"></div>
 
 	<div class="grid-container">
 		{Array.from({ length: 20 }).map((_, i) => (
@@ -49,6 +31,7 @@ const myImages = [
 				<img src="" alt="" />
 			</div>
 		))}
+	</div>
 	</div>
 
 	<a href="../games/" class="github-corner">

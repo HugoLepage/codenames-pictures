@@ -41,8 +41,10 @@ function loadGame() {
                 const cardIndex = gameData.cardIndex || [];
                 const revealed = gameData.revealed || [];
                 const roles = gameData.roles || [];
+                const startingTeam = gameData.startingTeam || 'red';
                 showCardImages(cardIndex, roles, revealed);
                 spymaster();
+                updateStartingTeam(startingTeam);
             } else {
                 console.log("No game data found.");
             }
@@ -116,7 +118,12 @@ function revealCard(index) {
     });
 }   
 
-
+function updateStartingTeam(startingTeam) {
+    const startingTeamDiv = document.querySelector('.startingTeam');
+    if (startingTeamDiv) {
+        startingTeamDiv.style.backgroundColor = startingTeam === 'red' ? 'red' : 'blue';
+    }
+}
 
 function spymaster() {
     // Toggle spymaster mode
@@ -288,10 +295,24 @@ function adjustTopControlsForSmallScreen() {
     }
 }
 
+function adjustStartingTeamDiv() {
+    const startingTeamDiv = document.querySelector('.startingTeam');
+    if (startingTeamDiv) {
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        if (windowWidth - 360 < windowHeight) {
+            startingTeamDiv.style.top = '0px';
+        } else {
+            startingTeamDiv.style.top = '-16px';
+        }
+    }
+}
+
 function checkSize() {
     checkGitHubCornerVisibility();
     checkTitleVisibility();
     adjustTopControlsForSmallScreen();
+    adjustStartingTeamDiv();
 }
 
 // Check on load
