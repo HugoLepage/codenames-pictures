@@ -42,6 +42,7 @@ function loadGame() {
                 const revealed = gameData.revealed || [];
                 const roles = gameData.roles || [];
                 showCardImages(cardIndex, roles, revealed);
+                spymaster();
             } else {
                 console.log("No game data found.");
             }
@@ -119,6 +120,41 @@ function revealCard(index) {
 
 function spymaster() {
     // Toggle spymaster mode
+    const spymasterButton = document.getElementById('spymaster-btn');
+    if (!spymasterButton) return;
+
+    const isActive = spymasterButton.checked; // Use checked property for checkbox
+
+    const FirebaseReference = getFirebaseReference();
+    const gameRef = ref(database, `${FirebaseReference}/game`);
+    get(gameRef).then((snapshot) => {
+        if (!snapshot.exists()) return;
+        const gameData = snapshot.val();
+        const roles = gameData.roles || [];
+        const revealed = gameData.revealed || [];
+        const tiles = document.querySelectorAll('.grid-container .tile');
+
+        tiles.forEach((tile, i) => {
+            tile.style.boxShadow = '';
+            tile.style.background = '';
+            const img = tile.querySelector('img');
+            if (isActive && !revealed[i]) {
+                const role = roles[i];
+                if (role && role[0] === 'r') {
+                    tile.style.background = 'rgba(255,0,0,0.25)';
+                } else if (role && role[0] === 'b') {
+                    tile.style.background = 'rgba(0,0,255,0.25)';
+                } else if (role && role[0] === 'g') {
+                    tile.style.background = 'rgba(255,255,0,0.25)';
+                } else if (role && role[0] === 'k') {
+                    tile.style.background = 'rgba(0,0,0,0.60)';
+                }
+                if (img) img.style.opacity = '0.3';
+            } else {
+                if (img) img.style.opacity = '1';
+            }
+        });
+    });
 }
 
 
@@ -195,6 +231,9 @@ window.NewGame = NewGame;
 
 // Make revealing card function available globally
 window.revealCard = revealCard;
+
+// Make spymaster function available globally
+window.spymaster = spymaster;
 
 // ################################################################
 // Responsive Design Functions
