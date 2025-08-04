@@ -5,7 +5,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-import { ref, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+import { ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 import { get, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
 // Firebase configuration
@@ -33,18 +33,20 @@ function getFirebaseReference(){
 function loadGame() {
     const FirebaseReference = getFirebaseReference();
     const gameRef = ref(database, `${FirebaseReference}/game`);
-    get(gameRef).then((snapshot) => {
-        if (snapshot.exists()) {
-            const gameData = snapshot.val();
-            console.log("Game data loaded successfully:", gameData);
-            const cardIndex = gameData.cardIndex || [];
-            showCardImages(cardIndex);
-            // Here you can update the UI with the loaded game data
-        } else {
-            console.log("No game data found.");
+    onValue(gameRef, (snapshot) => {
+        try {
+            if (snapshot.exists()) {
+                const gameData = snapshot.val();
+                console.log("Game data loaded successfully:", gameData);
+                const cardIndex = gameData.cardIndex || [];
+                showCardImages(cardIndex);
+                // Here you can update the UI with the loaded game data
+            } else {
+                console.log("No game data found.");
+            }
+        } catch (error) {
+            console.error("Error loading game data:", error);
         }
-    }).catch((error) => {
-        console.error("Error loading game data:", error);
     });
 }
 
@@ -65,7 +67,7 @@ function NewGame() {
     });
 
     setGame();
-    loadGame();
+    // loadGame();
 }
 
 function showCardImages(cardIndex) {
@@ -86,29 +88,23 @@ function spymaster() {
 
 function setGame() {
     const cardIndex = getUniqueRandomIntegers(20, 0, 279);
-    // const cardImages = cardIndex.map(num => `./assets/cards/card-${String(num)}.jpg`);
 
-    // const tiles = document.querySelectorAll('.grid-container .tile img');
-    // cardImages.forEach((src, i) => {
-    //     if (tiles[i]) {
-    //         tiles[i].src = src;
-    //         tiles[i].alt = `Card ${cardIndex[i]}`;
-    //     }
-    // });
-
-    let redIndex, redRoles, blueIndex, blueRoles;
+    // Generate roles for the game
+    let redIndex, redRoles, blueIndex, blueRoles, startingTeam;
     if (Math.random() < 0.5) {
         // Red team starts
         redIndex = getUniqueRandomIntegers(8, 0, 7);
         redRoles = redIndex.map(i => `r${i}`);
         blueIndex = getUniqueRandomIntegers(7, 0, 7);
         blueRoles = blueIndex.map(i => `b${i}`);
+        startingTeam = 'red';
     } else {
         // Blue team starts
         redIndex = getUniqueRandomIntegers(7, 0, 7);
         redRoles = redIndex.map(i => `r${i}`);
         blueIndex = getUniqueRandomIntegers(8, 0, 7);
         blueRoles = blueIndex.map(i => `b${i}`);
+        startingTeam = 'blue';
     }
     const greenIndex = getUniqueRandomIntegers(4, 0, 9);
     const greenRoles = greenIndex.map(i => `g${i}`);
@@ -127,7 +123,8 @@ function setGame() {
     const gameData = {
         roles: shuffledRoles,
         cardIndex: cardIndex,
-        revealed: revealed
+        revealed: revealed,
+        startingTeam: startingTeam
     };
     set(gameRef, gameData)
         .then(() => {
