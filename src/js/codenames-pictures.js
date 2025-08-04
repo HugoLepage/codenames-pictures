@@ -7,15 +7,28 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebas
 import { getDatabase } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 import { ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 import { get, update } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
     databaseURL: "https://codenames-pictures-2e44c-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "codenames-pictures-2e44c"
+    projectId: "codenames-pictures-2e44c",
+    apiKey: "AIzaSyBucnBJ6tIhyeDLeXbXOC6XSrE7FE5QKRI",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Sign in a user anonymously when the page loads.
+// This gives every user a temporary ID.
+const auth = getAuth(app);
+signInAnonymously(auth).catch(function(error) {
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  console.error("Anonymous authentication failed:", errorCode, errorMessage);
+});
+
+
 const database = getDatabase(app);
 
 function getFirebaseReference(){
