@@ -33,8 +33,7 @@ function getFirebaseReference(){
 // Gameplay Functions
 // ################################################################
 
-
-
+const blueRoles = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7', 'b8'];
 function NewGame() {
     // Reset the game state
     const FirebaseReference = getFirebaseReference();
@@ -63,6 +62,49 @@ function setGame() {
             tiles[i].alt = `Card ${cardIndex[i]}`;
         }
     });
+
+    let redIndex, redRoles, blueIndex, blueRoles;
+    if (Math.random() < 0.5) {
+        // Red team starts
+        redIndex = getUniqueRandomIntegers(8, 0, 7);
+        redRoles = redIndex.map(i => `r${i}`);
+        blueIndex = getUniqueRandomIntegers(7, 0, 7);
+        blueRoles = blueIndex.map(i => `b${i}`);
+    } else {
+        // Blue team starts
+        redIndex = getUniqueRandomIntegers(7, 0, 7);
+        redRoles = redIndex.map(i => `r${i}`);
+        blueIndex = getUniqueRandomIntegers(8, 0, 7);
+        blueRoles = blueIndex.map(i => `b${i}`);
+    }
+    const greenIndex = getUniqueRandomIntegers(4, 0, 9);
+    const greenRoles = greenIndex.map(i => `g${i}`);
+
+    const blackRole = "k1";
+
+    const roles = [...redRoles, ...blueRoles, ...greenRoles, blackRole];
+    const shuffleOrder = getUniqueRandomIntegers(20, 0, 19);
+
+    const shuffledRoles = shuffleOrder.map(i => roles[i]);
+
+    const revealed = Array(20).fill(false);
+
+    const FirebaseReference = getFirebaseReference();
+    const gameRef = ref(database, `${FirebaseReference}/game`);
+    const gameData = {
+        roles: shuffledRoles,
+        cardIndex: cardIndex,
+        revealed: revealed
+    };
+    set(gameRef, gameData)
+        .then(() => {
+            console.log("Game data set successfully:", gameData);
+        })
+        .catch((error) => {
+            console.error("Error setting game data:", error);
+        }
+    );
+
 }
 
 
