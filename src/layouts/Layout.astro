@@ -10,6 +10,16 @@ import "../styles/main.css";
 		<link rel="icon" type="image/png" href="/codenames-pictures/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Codenames Pictures</title>
+
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-KEEF9WYF56"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-KEEF9WYF56');
+		</script>
 	</head>
 	<body>
 		<slot />
