@@ -108,6 +108,11 @@ function showCardImages(cardIndex, roles, revealed) {
 }
 
 function revealCard(index) {
+    const spymasterButton = document.getElementById('spymaster-btn');
+    if (spymasterButton && spymasterButton.checked) {
+        // Do not reveal card if spymaster mode is active
+        return;
+    }
     const FirebaseReference = getFirebaseReference();
     const gameRef = ref(database, `${FirebaseReference}/game`);
     get(gameRef).then((snapshot) => {
